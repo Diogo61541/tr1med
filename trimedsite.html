@@ -723,8 +723,12 @@
             <div id="profileForm" style="display:none;">
               <label>Foto de perfil (upload local)</label>
               <input id="photoFile" type="file" accept="image/*" />
+              <label>Nome</label>
+              <input id="profileNameEdit" type="text" placeholder="Seu nome completo" />
               <label>Telefone</label>
               <input id="profilePhone" type="text" placeholder="(61) 99999-0000" />
+              <label>Cidade</label>
+              <input id="profileCity" type="text" placeholder="Sua cidade" />
               <button class="btn btn-light" id="saveProfile" type="button">Salvar perfil</button>
 
               <hr style="border:0; border-top:1px solid #e3edf9; margin:10px 0;" />
@@ -899,7 +903,9 @@
       const profileRole = document.getElementById("profileRole");
       const profileForm = document.getElementById("profileForm");
       const photoFile = document.getElementById("photoFile");
+      const profileNameEdit = document.getElementById("profileNameEdit");
       const profilePhone = document.getElementById("profilePhone");
+      const profileCity = document.getElementById("profileCity");
       const saveProfile = document.getElementById("saveProfile");
       const addrRua = document.getElementById("addrRua");
       const addrNumero = document.getElementById("addrNumero");
@@ -958,7 +964,9 @@
         profileName.textContent = currentUser.name;
         profileRole.textContent = currentUser.type === "medico" ? "Perfil médico" : "Perfil paciente";
         photoFile.value = "";
+        profileNameEdit.value = currentUser.name || "";
         profilePhone.value = currentUser.phone || "";
+        profileCity.value = currentUser.city || "";
 
         if (currentUser.photo) {
           profilePhoto.style.backgroundImage = "url('" + currentUser.photo + "')";
@@ -1194,7 +1202,9 @@
 
       saveProfile.addEventListener("click", function () {
         if (!currentUser) { return; }
-        currentUser.phone = profilePhone.value.trim();
+        currentUser.name = profileNameEdit.value.trim() || currentUser.name;
+        currentUser.phone = profilePhone.value.trim() || currentUser.phone;
+        currentUser.city = profileCity.value.trim() || currentUser.city;
         saveCurrentUser();
         syncCurrentUser();
         alert("Perfil atualizado com sucesso.");
